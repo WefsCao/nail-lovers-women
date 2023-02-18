@@ -1,0 +1,14 @@
+@charset "utf-8";
+// テンプレート: 2020A
+// 書式: PRECSS
+
+// サイト内共通、ライブラリ
+@import "_pages";
+@import "_share";
+@import "_header";
+@import "_footer";
+
+// 各ページ
+@import "_page_nail";
+
+// END OF FILE

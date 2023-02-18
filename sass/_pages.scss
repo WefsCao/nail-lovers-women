@@ -1,0 +1,1773 @@
+@charset "utf-8";
+// テンプレート: 2021A
+// 書式: PRECSS
+
+// _pages.scss v20210213
+
+// 当ファイルは原則「★」の箇所のみサイト固有のスタイルに応じて変更。
+
+
+// -----------------------------
+// ★変数 : 数値
+// -----------------------------
+
+// コンテンツ標準幅(パディングを含まない)
+$contentWidth : calc(100% - 30px);
+
+// コンテンツ標準最大幅(パディングを含まない)
+$contentMaxWidth : 1160px;
+
+// フレキシブルレイアウトのPC最小幅(パディングを含む)
+$pcBodyMinWidth : 1240px;
+
+// スマートフォン用 大きさ係数
+$sp: 0.55; // (640px幅PSD→375px幅スマホ想定)
+
+
+// -----------------------------
+// ★変数 : 背景と文字色(サイトに応じて変更可)
+// -----------------------------
+
+// 背景色 (Color:BackGround)
+$cBg  : #fff;	 // ベース背景:白
+$cBg2 : #f6f6f6; // コラム色
+$cBg3 : #eeeeee; // グロナビ等
+//$cBg4 : rgba(61, 131, 218, 0.9); // ドロワ背景
+
+// 文字色 (Color:Text)
+//$cT  : #333;	// 本文
+$cT  : #555555;	// 本文
+$cT2 : #ffe400; // サイトカラー準拠
+
+// アクセントカラー(c1,c2,… 主要な色のみ)
+$c1 : #ffe400;   // サイトカラー
+$c2 : #6b321b; // サブカラー
+//$c3 : #2cb308; // 緑色文字
+
+$bg1 : #000;
+$bg2 : #000;
+$bg3 : #000;
+
+$b1 : #000;
+$b2 : #000;
+
+
+// -----------------------------
+// ★変数 : フォント ($ff_)
+// -----------------------------
+
+// Webフォントを使わない場合(U+005Cの円記号対応)
+//$ff_gothic: "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+
+// ★Webフォント読込
+// ※必要なものだけ読み込むこと
+
+// ゴシック (100,300,400,500,700,700,900)
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap&subset=japanese');
+$ff_gothic: "Noto Sans JP", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+
+// 明朝 (200,300,400,500,600,700,900)
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700;900&display=swap&subset=japanese');
+$ff_mincho : "Noto Serif JP", "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", "HG明朝E", "ＭＳ Ｐ明朝", "ＭＳ 明朝", serif;
+
+// 丸ゴシック (100,300,400,500,700,800,900)
+//@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;800&display=swap&subset=japanese');
+$ff_rounded : 'M PLUS Rounded 1c', "Noto Sans JP", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+
+// 英字：Spartan (Bourbon Grotesqueの代替)
+@import url('https://fonts.googleapis.com/css2?family=Spartan:wght@800&display=swap');
+$ff_titleEn : 'Spartan', $ff_gothic;
+
+// 英字；Lobster
+//@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+//$ff_titleEn : 'Lobster', $ff_gothic;
+
+// 英字；Arial
+//$ff_titleEn : 'Arial', $ff_gothic;
+
+// ★基本フォント
+// ※サイト全体に影響するため変更時要注意
+$ff_base : $ff_mincho;
+
+
+// -----------------------------
+// UA対応用 MIXIN
+// -----------------------------
+
+// メディアクエリ v20210202
+@mixin mq($bp: pc) {
+	$breakpoints: (
+		// Small SP  (ex. iPhone5s,SE)
+		'ssp': 'all and (max-width: 370.9px)',
+		// Normal SP (ex. iPhone 6/7/8)
+		'sp': 'all and (max-width: 640.9px)',
+		// PC (ex. Chrome, IE11)
+		'pc': 'all and (min-width: 641px)',
+		// WIDE PC
+		'wpc': 'all and (min-width: 1681px)'
+	) !default;
+	@media #{map-get($breakpoints, $bp)} {
+		@content;
+	}
+}
+
+// 各UA(ブラウザ)特別対応(JSにてclass付与) v20200804
+@mixin for($ua) {
+	$ua_selector: (
+		// MS IE
+		'IE' : '.is_ua_IE',
+		// Apple iOS
+		'iOS': '.is_ua_iOS',
+	) !default;
+
+	// 当mixinのみ特例で親要素指定
+	body#{map-get($ua_selector, $ua)} & {
+		@content;
+	}
+}
+
+
+// -----------------------------
+// 図形用 MIXIN
+// -----------------------------
+
+// アイコン v20210312
+@mixin icon($pseudo:before, $url:'', $width:.8em, $height:.8em, $margin:'', $size:contain) {
+	// マージン既定値
+	@if ($margin == '' and $pseudo == before) {
+		$margin: 0 .5em -.15em 0;
+	} @elseif ($margin == '' and $pseudo == after) {
+		$margin: 0 0 -.15em .5em;
+	}
+
+	&:#{$pseudo} {
+		box-sizing: border-box;
+		display: inline-block;
+		content: "";
+		background: url(#{$url}) no-repeat center/$size;
+		margin: $margin;
+		width: $width;
+		height: $height;
+	}
+}
+
+// 矢印 ">"型 v20201206
+@mixin iconArrow($pseudo:after, $pos:absolute, $color:#ccc, $width:.4em, $border: 2px ){
+	@if $pos == absolute {
+		position: relative;
+	}
+	&:#{$pseudo} {
+		box-sizing: border-box;
+		content: "";
+		width: $width;
+		height: $width;
+		border: 1px solid $color;
+		border-width: 0 $border $border 0;
+		transform-origin: center;
+		transform: rotate(-45deg);
+
+		@if $pos == absolute {
+			display: block;
+			position: absolute;
+			top: calc(50% - #{$width/1.8});
+			@if $pseudo == before {
+				left: .75em;
+			} @else {
+				right: .75em;
+			}
+		} @else {
+			display: inline-block;
+			//vertical-align: 0.15em;
+			@if $pseudo == before {
+				margin-right: .6em;
+			} @else {
+				margin-left: .6em;
+			}
+		}
+	}
+}
+
+// 矢印 ▼型 v20200824
+@mixin afterTriangle($color:#ccc, $width:.4em){
+	position: relative;
+	&:after {
+		position: absolute;
+		display: block;
+		content: "";
+		top: calc(50% - #{$width});
+		right: .75em;
+		border: $width solid transparent;
+		border-width: #{$width/1.5} #{$width};
+		border-left-color: $color;
+	}
+}
+
+// ストライプ v20210115
+@mixin bgStripe($c1:#ccc, $c2:transparent, $s:5px, $w:50%, $deg:135deg) {
+	// $c1 : 色1
+	// $c2 : 色2
+	// $s  : 大きさ
+	// $w  : 色1の太さ(大きさに対する%。50%まで)
+	background: $c2 linear-gradient($deg,
+		$c2 #{50%-($w/2)}, $c1 #{51%-($w/2)},
+		$c1 50%, $c2 51%,
+		$c2 #{100%-($w/2)}, $c1 #{101%-($w/2)},
+		$c1) right bottom/$s $s;
+}
+
+
+// -----------------------------
+// 配置 MIXIN
+// -----------------------------
+
+// 個数指定 flex横並び v20201205
+@mixin flexItems($w,$iW,$c,$n) {
+	// 使用例： @include flexItems(1200px,360px,60px,3);
+	// $w  : 全体の幅
+	// $iW : 1項目の幅
+	// $mt : 上の間隔
+	// $n  : 横に並ぶ個数
+
+	display: flex;
+	flex-wrap: wrap;
+	> * {
+		width: ($iW/$w)*100%;
+		margin-left: ((($w - ($iW * $n)) / $w ) * 100%) / ($n - 1);
+		&:nth-child( #{$n}n-#{$n - 1} ) {
+			margin-left: 0;
+		}
+		&:nth-child( n+#{$n + 1} ) {
+			margin-top: $mt;
+		}
+	}
+}
+
+
+// ------------------------------
+// UA制御・対策
+// ------------------------------
+
+// VIEWPORT
+@-ms-viewport {
+	width: device-width;
+}
+
+
+// -----------------------------
+// 基本HTML要素 (最低限のリセットのみ)
+// -----------------------------
+
+html {
+	@include mq(pc) {
+		overflow-y: scroll; // 常に縦スクロールバーを表示
+	}
+}
+body {
+	// Reset
+	padding: 0;
+	margin: 0;
+	min-height: 100vh;
+	min-width: 320px;
+	background: transparent;
+
+	// PC時はフレキシブルレイアウト
+	@include mq(pc) {
+		min-width: $pcBodyMinWidth;
+	}
+}
+
+
+// -----------------------------
+// .ly : 基本レイアウト
+// -----------------------------
+
+// main要素 (WordPress Stinger plus2 対策リセット)
+.ly_main {
+	// Reset
+	margin: 0;
+	padding: 0;
+	background: transparent;
+	border-radius: 0;
+}
+
+// コンテナ
+.ly_cont {
+	width: $contentWidth;
+	max-width: $contentMaxWidth;
+	margin-left: auto;
+	margin-right: auto;
+
+	@include mq(pc) {
+		width: 100%; // PC時に横スクロール許容
+	}
+}
+
+// サイドバーがある場合のsection内
+.ly_cont.ly_cont__index {
+	@include mq(sp) {
+		width: 100%;
+	}
+}
+
+
+// -----------------------------
+// 指定ブロック内 HTML要素リセット v20210202
+// -----------------------------
+
+.ly_header,
+.bl_mv,
+.bl_path_wrapper,
+.bl_sect,
+.bl_pager,
+.ly_cont_aside,
+.ly_footer {
+	// Init
+	letter-spacing: 0;
+	line-height: 1.5;
+	box-sizing: border-box;
+	display: block;
+	margin: 0;
+	padding: 0;
+
+	// for iOS
+	-webkit-text-size-adjust: 100%;
+	background: url("../img/dummy.png");
+
+	// Design, Font
+	font-family: $ff_base;
+	font-weight: normal;
+	font-size: 14px;
+	color: $cT;
+
+	// text (禁則処理,強制改行)
+	line-break: strict;
+	word-wrap: break-word; // for IE
+	word-break: break-word;
+	overflow-wrap: break-word;
+
+	// ※要調整
+	* {
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+		background: none;
+		border: none;
+		font: inherit;
+		color: inherit;
+
+		&:before,
+		&:after {
+			box-sizing: border-box;
+		}
+	}
+
+	// コンテナ
+	.ly_cont {
+		margin: 0 auto;
+	}
+
+	// デフォルトスタイル
+	b, em {
+		font: inherit;
+		font-weight: 700;
+	}
+	i {
+		// アイコン等に使う想定で斜体解除
+		font: inherit;
+	}
+	ol, ul {
+		list-style: none;
+		padding: 0;
+	}
+	table {
+		border-collapse: collapse;
+		border-spacing: 0;
+	}
+	caption, th, td {
+		text-align: left;
+		font-weight: normal;
+		vertical-align: middle;
+	}
+	q, blockquote {
+		quotes:none
+			&:before,
+			&:after {
+				content:"";
+				content:none;
+				}
+	}
+
+	// HTML5要素
+	article, aside, details,
+	figcaption, figure,
+	footer, header, hgroup, main,
+	menu, nav, section, summary {
+		display:block
+	}
+
+	// リンク
+	a {
+		text-decoration: none;
+		color: inherit;
+		img {
+			border:none;
+		}
+
+		&:hover,
+		&:focus {
+			text-decoration: none;
+		}
+
+		// 電話番号
+		&[href^="tel:"] {
+			transition: none;
+			cursor: default;
+			&:hover,
+			&:focus {
+				opacity: 1;
+			}
+			@include mq(pc) {
+				// ※試験的実装
+				pointer-events: none;
+			}
+		}
+	}
+
+	// 画像
+	img {
+		max-width: 100%;
+		height: auto;
+	}
+
+	// 画像 v20210126
+	figure,
+	picture {
+		display: block;
+		text-align: center;
+		img {
+			vertical-align: bottom;
+		}
+	}
+}
+
+
+// -----------------------------
+// サブページ用メインビジュアル v20201103
+// -----------------------------
+
+.bl_mv.bl_mv__sub {
+	// Reset
+	position: relative;
+	line-height: 1;
+	font-size: 14px;
+	text-align: center;
+
+	// ★Design
+    background: #f9fafe url(../img/mv_bg.png) repeat center;
+
+	@include mq(sp) {
+		// ★大きさ設定:SP
+		$w: 640*$sp; // 背景画像の幅px
+		$h: 600*$sp; // 背景画像の高さpx
+
+		height: #{($h/$w)*100}vw;
+		//min-height: #{($h/14)*1em};
+
+        background-size: cover;
+
+		// ★Design(全サブ共通の場合)
+		//background-image: url(../img/mv_sp.jpg);
+	}
+	@include mq(pc) {
+		// ★大きさ設定:PC
+		$w: 1920; // 背景画像の幅px
+		$h: 400;  // 背景画像の高さpx
+		$minW: $pcBodyMinWidth; // PC最小幅px
+
+		height: #{($h/$w)*100}vw;
+		//min-height: #{$h*($minW/$w)};
+		min-height: 400px;
+		max-height: #{$h}px;
+
+		// ★Design(全サブ共通の場合)
+		//background-image: url(../img/mv_pc.jpg);
+		//margin: 21px 30px 0;
+        margin-top: 40px;
+	}
+
+	// コンテナ
+	.bl_mv_inner {
+		margin: 0 auto;
+		height: 100%;
+		display: flex;
+		flex-wrap: wrap;
+		width: $contentWidth;
+		max-width: $contentMaxWidth;
+
+		// Design
+		justify-content: center; // カラム中央寄せ
+		align-items: center;
+		align-content: center;
+		position: relative;
+
+		@include mq(sp) {
+			// ★fixedヘッダー高さ分
+			//padding-top: 55px;
+			//padding-bottom: 15%;
+		}
+		@include mq(pc) {
+			width: 100%;
+			//padding: 0 20px;
+
+			// ★fixedヘッダー高さ分
+			//padding-top: 80px;
+		}
+
+		// 写真
+		&:after {
+			position: absolute;
+			display: block;
+			content: "";
+			background: no-repeat left bottom;
+			width: 230px;
+			height: 100%;
+			bottom: 0;
+
+			@include mq(sp) {
+				width: 100%;
+				background-size: contain;
+				height: round(220px*$sp);
+				height: 31vw;
+			}
+		}
+
+	}
+
+	// タイトルカラム
+	.bl_mv_col {
+		// Design
+//		font-family: $ff_base;
+//		text-align: left;
+//		color: #fff;
+		//background: #fff;
+        color: #b38a41;
+		//border: 6px solid #6b321b;
+		//border-radius: 15px;
+		//padding-bottom: 1%;
+
+		/*
+		background: rgba(255, 255, 255, .85);
+		min-width: 500px;
+		min-height: 133px;
+		*/
+
+		display: flex;
+//		flex-wrap: wrap;
+		flex-direction: column;
+
+		justify-content: center;
+		align-items: center;
+		align-content: center;
+
+		@include mq(sp) {
+			width: 100%;
+			border-radius: 8px;
+			min-height: 200px*$sp;
+			border-width: 4px;
+		}
+		@include mq(pc) {
+			width: 750px;
+			height: 230px;
+		}
+	}
+
+	// 日本語タイトル
+	.bl_mv_title {
+		line-height: 1.25;
+
+		// ★Design
+		font-size: 30px;
+		font-weight: 700;
+
+		@include mq(sp) {
+			font-size: 40px*$sp;
+		}
+		@include mq(pc) {
+			letter-spacing: 0;
+			padding-left: .2em;
+		}
+	}
+
+	// 英語タイトル
+	.bl_mv_subTitle {
+		display: block;
+
+		// ★Design
+		//font-family: $ff_titleEn;
+		font-size: 14px;
+		font-weight: 700;
+		line-height: 1.1;
+		letter-spacing: .2em;
+		margin-top: .75em;
+
+		@include mq(sp) {
+			font-size: 24px*$sp;
+		}
+	}
+}
+
+
+// -----------------------------
+// ページ構造リスト(パンくず) v20210130
+// -----------------------------
+
+.bl_path_wrapper {
+	position: relative;
+	//border-bottom: 3px solid #000;
+
+
+	// パンくずリスト本体
+	.bl_path {
+		display: flex;
+		flex-wrap: wrap;
+		width: $contentWidth;
+		max-width: $contentMaxWidth;
+		margin: 0 auto;
+
+		// Design
+		justify-content: flex-start;
+		//justify-content: flex-end;
+		letter-spacing: .05em;
+		line-height: 1.5;
+		color: $cT;
+		font-family: $ff_base;
+
+		//height: 80px;
+		align-items: center;
+		align-content: center;
+		overflow: hidden;
+		//font-size: 12px;
+
+		@include mq(sp) {
+			font-size: 12px;
+			//margin-top: 15px;
+			border-radius: 4px;
+			padding: 15px 0;
+		}
+		@include mq(pc) {
+			width: 100%; // PC時に横スクロール許容
+			padding: 20px 0;
+		}
+
+		& > li {
+			display: block;
+			// 一行化
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+
+			// ★Design
+			font-weight: 700;
+			//border-left: 1px solid $cT;
+			//padding: .1em 1em;
+			//margin-bottom: 2px;
+
+			// 長い文字列は省略
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			max-width: 50em;
+
+			@include mq(sp) {
+				max-width: 16em;
+			}
+			@include mq(pc) {
+				letter-spacing: .2em;
+			}
+
+			// ★Design
+			& > a {
+				//color: #fff;
+				//display: block;
+			}
+			// TOP
+			&:first-child {
+				color: #333;
+				//color: $c2;
+				//text-decoration: underline;
+			}
+			// サブ、カテゴリ等
+			&:nth-child(n+2) {
+				// 区切り文字
+				&:before {
+					box-sizing: border-box;
+					content: "/";
+					margin: 0 .5em;
+				}
+			}
+			// 現在のページ
+			&:last-child {
+				> a {
+					//color: inherit;
+					//color: #7a7a7a;
+				}
+			}
+		}
+
+		a {
+			/*
+			// 長い文字列は省略
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			max-width: 30em;
+
+			@include mq(sp) {
+			max-width: 16em;
+		}
+			*/
+			@include mq(pc) {
+				transition: .2s opacity;
+				&:hover,
+				&:focus {
+					opacity: .7;
+				}
+			}
+		}
+
+		// パンくずにh1を含む場合用
+		h1 {
+			display: inline;
+		}
+	}
+}
+
+// 後続コンテンツの背景を利用する場合
+.bl_path_wrapper.bl_path_wrapper__float {
+
+	//直下の要素との距離
+	& + #content-w > section:nth-child(1) {
+		// ★Design
+		padding-top: 134px;
+
+		@include mq(sp) {
+			padding-top: round(120px*$sp);
+		}
+	}
+
+	.bl_path {
+		position: absolute;
+
+		// ★Design
+		//border-radius: 6px;
+		//background: #fff;
+		//padding: 10px 20px;
+		padding: 0;
+		top: 20px;
+		left: calc(50% - #{$contentMaxWidth/2});
+
+		@include mq(sp) {
+			left: 15px;
+			top: 15px;
+			//padding: 5px 10px;
+		}
+	}
+}
+
+
+// -----------------------------
+// .bl_ : 汎用ブロック
+// -----------------------------
+// ※詳細はセクション内かモディファイアで定義
+
+// ボタン群 v20210126
+.bl_btns {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	margin: auto;
+
+}
+
+// バナー群 v20210126
+.bl_bnrs {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	margin: auto;
+}
+
+// 表 v20201112
+.bl_table {
+	// Reset
+	table-layout: fixed;
+	width: 100%;
+	margin: 0 auto;
+
+	// Design
+	th,
+	td {
+		border: 1px solid #999;
+		padding: .5em 1em;
+	}
+	th {
+		background: $cBg2;
+		font-weight: 700;
+	}
+}
+
+// テキスト型リスト v20201205
+.bl_list {
+	// Reset
+	padding: 0;
+	margin: 0 auto;
+	list-style: none;
+	max-width: 100%;
+
+	& > li {
+		padding-left: 1em;
+
+		// リストマーク
+		&:before {
+			box-sizing: border-box;
+			float: left;
+			font: inherit;
+			display: block;
+			width: 1em;
+			margin-left: -1em;
+
+			// ※標準では中黒
+			content: "・";
+		}
+	}
+
+	// ※印リスト
+	&.bl_list__note {
+		> li:before {
+			content: "※";
+		}
+	}
+
+	// ◆印リスト
+	&.bl_list__dia {
+		> li:before {
+			content: "◆";
+		}
+	}
+
+	// 数字リスト
+	&.bl_list__num {
+		list-style: decimal;
+		padding-left: 1.5em;
+		> li {
+			padding-left: 0;
+			&:before {
+				display: none;
+			}
+		}
+	}
+}
+
+// iframe埋め込み v20201030
+.bl_iframe_wrapper {
+	position: relative;
+	display: block;
+	overflow: hidden;
+	width: 100%;
+	height: 320px; // Default
+
+	iframe {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+}
+
+
+// -----------------------------
+// .el_ : 汎用要素
+// -----------------------------
+
+// ボタン デフォルト v20201103
+%el_btn {
+	// Preset
+	appearance: none;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	text-align: center;
+	cursor: pointer;
+	border: none;
+	background: transparent;
+	color: inherit;
+	outline: none;
+	font: inherit;
+	width: auto;
+	padding: .25em .75em .35em;
+	line-height: 1.25;
+
+	// Appleスマホ用ガイドラインに基づく
+	min-width: 44px;
+	min-height: 44px;
+}
+
+// サイト用 標準ボタン
+// ※高さは height または min-height で指定。
+.el_btn {
+	@extend %el_btn;
+
+	// ★Design
+	background: $c1;
+	color: #fff;
+
+	// Event
+	@include mq(pc) {
+		transition: .2s opacity;
+		&:hover,
+		&:focus {
+			opacity: .7;
+		}
+	}
+}
+
+// バナー v20210126
+.el_bnr {
+	display: block;
+	max-width: 100%;
+
+	img {
+		width: 100%;
+		height: auto;
+		vertical-align: bottom;
+	}
+}
+
+// リンクつきバナー v20201031
+a.el_bnr {
+	@include mq(pc) {
+		transition: .2s opacity;
+		&:hover,
+		&:focus {
+			opacity: .7;
+		}
+	}
+}
+
+// wbr要素(改行指定)を含むブロック v20210202
+.el_wbr,
+.bl_header_nav a,
+.bl_header_nav label,
+.bl_footer_nav a,
+.bl_footer_nav label {
+	max-width: 100%;
+	word-break: keep-all;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+
+	wbr:before {
+		content: "\0200b"; // forIE
+	}
+}
+
+// 改行補助(単語の区切り)
+.el_w {
+	display: inline-block;
+}
+
+// CMS画像(NoImage対応) v20210126
+.el_img {
+	display: block;
+	max-width: 100%;
+	max-height: 100vw;
+	overflow: hidden;
+
+	// NoImage
+	&:empty {
+		// Design
+		position: relative;
+
+		// ★Design
+		//background: #eee;
+        background: #d2d2d2;
+
+		&:before {
+			position: absolute;
+			display: block;
+			content: "";
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+
+			// ★Design
+			//background: url(../img/i_logotype.png) no-repeat center/45% auto;
+			//opacity: .3;
+			background: url(../img/i_noimage_wt.png) no-repeat center/45% auto;
+
+			@include mq(pc) {
+				image-rendering: -webkit-optimize-contrast; // for webkit
+			}
+		}
+	}
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		font-family: "object-fit: cover;";
+	}
+}
+
+
+// -----------------------------
+// .hp_ : ヘルパークラス
+// -----------------------------
+
+// PC用 (SP時は非表示)
+.hp_pc {
+	@include mq(sp) {
+		display: none !important;
+	}
+}
+// SP用 (PC時は非表示)
+.hp_sp {
+	@include mq(pc) {
+		display: none !important;
+	}
+}
+// 2文字要素の1字空け
+.hp_flls1e {
+	&:first-letter {
+		letter-spacing: 1em !important;
+	}
+}
+// 右寄せ
+.hp_tar {
+	text-align: right !important;
+}
+// 文字間ゼロ
+.hp_ls0 {
+	letter-spacing: 0 !important;
+}
+// 内容の最長幅で中央寄せ
+.hp_df_fdc_aic {
+	display: flex !important;
+	flex-direction: column !important;
+	align-items: center !important;
+}
+
+
+// -----------------------------
+// WordPress対策 (StingerPlus2)
+// -----------------------------
+
+#content-w {
+	padding-top: 0;
+}
+#footer {
+	padding: 0;
+}
+a {
+	&:hover,
+	&:focus {
+		img {
+			opacity: 1;
+		}
+	}
+}
+// コピーライト非表示
+.copyr {
+	display: none;
+}
+
+
+// -----------------------------
+// アニメーション
+// -----------------------------
+/*
+@keyframes showToLeft {
+	0%   {
+		opacity: 0;
+		transform: translateX(20%);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+@keyframes showToRight {
+	0%   {
+		opacity: 0;
+		transform: translateX(-20%);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+@keyframes showToTop {
+	0%   {
+		opacity: 0;
+		transform: translateY(100%);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+@keyframes largeToNormal {
+	0%   {
+		transform: scale(1.1);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+@keyframes bound {
+	0%   {
+		transform: scale(.5);
+	}
+	30%   {
+		transform: scale(1.1);
+	}
+	60%   {
+		transform: scale(.9);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+*/
+@keyframes bgLoopX {
+	0% {
+		background-position: right 0 bottom 0;
+	}
+	100% {
+		background-position: right 100px bottom 0;
+	}
+}
+
+
+// -----------------------------
+// WP新着投稿表示 v20210211
+// -----------------------------
+
+// 最新投稿一覧
+.bl_latestPosts {
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+
+	/*
+	// ★以下は利用セクション内へのコピー用です。
+
+	// ★列の設定
+	> .bl_latestPost {
+		position: relative;
+
+		@include mq(sp) {
+			// ★横1列の場合
+			//margin: 70px*$sp auto 0;
+
+			// ★横2列の場合
+			width: 48%;
+			margin: round(60px*$sp) 0 0 4%;
+
+			&:nth-child(2n-1) {
+				margin-left: 0;
+			}
+		}
+		@include mq(pc) {
+		// ★ 3列の場合
+			width: 31.04%;
+			max-width: 360px;
+			margin-top: 40px;
+			margin-left: 3.44%;
+
+			&:nth-child(3n-2) {
+				margin-left: 0;
+			}
+
+			// ★ 4列の場合
+			width: 22%;
+			max-width: 260px;
+			margin-top: 40px;
+			margin-left: 4%;
+
+			&:nth-child(4n-3) {
+				margin-left: 0;
+			}
+		}
+	}
+	*/
+}
+
+// 各投稿
+.bl_latestPost {
+	position: relative;
+	width: 100%;
+
+	// 詳細へのリンク
+	> a {
+		display: block;
+		width: 100%;
+		height: 100%;
+
+		/*
+		// ★以下は利用セクション内へのコピー用です。
+		@include mq(sp) {
+			// ★左に画像
+			padding: 25px 15px 15px 55%;
+			min-height: 50vw;
+		}
+		*/
+		@include mq(pc) {
+			//padding-bottom: 20px;
+
+			//transition: .2s opacity;
+			&:hover,
+			&:focus {
+				//opacity: .7;
+
+				figure img,
+				figure:empty:before {
+					transform: scale(1.1);
+				}
+			}
+		}
+	}
+
+	// サムネイル(アイキャッチ)
+	figure {
+		// Reset
+		overflow: hidden;
+
+		/*
+		// ★以下は利用セクション内へのコピー用です。
+
+		background: #fff;
+		border-radius: 10px 10px 0 0;
+
+		// Design (Size)
+		@include mq(sp) {
+			// ★上に画像(横1列の場合)
+			width: 100%;
+			height: 58vw;
+
+			// ★上に画像(横2列の場合)
+			width: 100%;
+			height: 29vw;
+
+			// ★左に画像
+			width: 50%;
+			height: 100%;
+			position: absolute;
+			left: 0;
+			top: 0;
+
+			// ★丸角
+			border-radius: 10px 0 0 10px;
+		}
+		*/
+		@include mq(pc) {
+			// ★4:3(W360pxに対して)
+			height: 270px;
+		}
+
+		// NoImage Transition
+		&:empty {
+			&:before {
+				transition: .4s transform;
+			}
+		}
+
+		img {
+			vertical-align: bottom;
+			max-width: 100%;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			font-family: 'object-fit: cover;'; // ofi.js
+			transition: .4s transform;
+		}
+	}
+
+	// 投稿日
+	time {
+		display: block;
+		white-space: nowrap;
+
+		// ★Design
+		letter-spacing: .05em;
+//		margin-top: 15px;
+//		@include mq(sp) {
+//			margin-top: 10px;
+//			font-size: 24px*$sp;
+//		}
+	}
+
+	// 記事タイトル
+	h3 {
+		display: block;
+	}
+
+	// 本文冒頭
+	p {
+//		color: #999;
+//		margin: 10px 20px 0;
+//
+//		@include mq(sp) {
+//			//margin: 10px 0 0;
+//			display: none;
+//		}
+	}
+}
+
+// 各投稿のカテゴリ
+.bl_latestPosts_cats {
+	display: inline-block;
+
+	/*
+	// ★以下はコメント解除せず、利用セクション内にコピーしてください。
+
+	// ★左上に配置
+	position: absolute;
+	z-index: 1;
+	left: 0;
+	top: 0;
+
+	background: $c1;
+	font-size: 20px;
+	font-weight: 700;
+	padding: .5em .75em;
+
+	 ★上部中央に配置(丸角)
+	border-radius: 1.3em / 50%;
+	left: 10%;
+	width: 80%;
+	top: -1.25em;
+	text-align: center;
+	font-size: 16px;
+	padding: .7em .5em .8em;
+	line-height: 1;
+	@include mq(sp) {
+		top: -1em;
+		padding: .5em .25em .6em;
+		border-radius: 1em / 50%;
+	}
+	*/
+
+	// 省略表示
+	overflow: hidden;
+	white-space: nowrap;
+	max-width: 100%;
+	text-overflow: ellipsis;
+
+	> i {
+		display: inline;
+		margin-right: .75em;
+		&:last-child {
+			margin-right: 0;
+		}
+	}
+}
+
+
+// 画面幅背景タイトル v20210217
+// ※親要素に要overflow:hidden
+.bl_sect_wideTitle {
+	position: relative;
+	z-index: 1;
+
+	// ★Design
+	text-align: center;
+	font-weight: 700;
+	line-height: 1.25;
+
+	margin-bottom: 110px;
+	padding: 1em 0 1.5em;
+	color: #fff;
+	font-size: 42px;
+
+	letter-spacing: .14em;
+	line-height: 1.52;
+
+	@include mq(sp) {
+		font-size: 40px*$sp;
+		margin-bottom: 110px*$sp;
+		padding: .75em 0;
+		letter-spacing: 0;
+		line-height: 1.3;
+	}
+
+	em {
+		color: $c1;
+		display: inline-block;
+	}
+	small {
+		font-size: .8em;
+	}
+
+	// 帯
+	&:after {
+		display: block;
+		position: absolute;
+		content: "";
+		z-index: -1;
+		top: 0;
+
+		left: calc(-100vw + 50%);
+		height: 100%;
+		width: 200vw;
+
+		// ★Design
+		background: $c2;
+	}
+
+	// 下向き三角
+	&:before {
+		display: block;
+		position: absolute;
+		content: "";
+		z-index: -1;
+		left: 50%;
+		bottom: 0;
+
+		// ★Design
+		background: $c2;
+		width: 86px;
+		height: 86px;
+		transform: translate(-50%, 50%) scale(1, .7) rotate(45deg);
+
+		@include mq(sp) {
+			width: 52px;
+			height: 52px;
+		}
+	}
+}
+
+// -----------------------------
+// ★サイト内 共通スタイル
+// -----------------------------
+// ※全ページに影響を与えるため変更は要注意。
+
+// 白背景・茶色枠ボタン
+.el_btn.el_btn__s1 {
+	background: #fff;
+	border: 4px solid $c2;
+	color: $c2;
+	font-weight: 700;
+	letter-spacing: .2em;
+	border-radius: 10px;
+
+	@include icon(after,'../img/i_arrow2_r_br.png',1em,1em, 0 0 -0.15em 0.5em);
+
+	@include mq(sp) {
+		border-radius: 6px;
+		border-width: 2px;
+		width: 100%;
+		max-width: 300px;
+		min-height: 100px*$sp;
+		font-size: 30px*$sp;
+	}
+	@include mq(pc) {
+		font-size: 20px;
+		width: 400px;
+		height: 80px;
+		image-rendering: -webkit-optimize-contrast; // for webkit
+	}
+}
+
+// 茶色背景ボタン
+.el_btn.el_btn__s2 {
+	background: $c2;
+	color: #fff;
+	font-weight: 500;
+	font-size: 18px;
+	letter-spacing: .2em;
+	border-radius: 5px;
+
+	@include icon(after,'../img/i_arrow2_r_wt.png',1.12em,1.12em, 0 0 -0.15em 0.5em);
+
+	@include mq(sp) {
+		border-radius: 4px;
+		width: 100%;
+		max-width: 300px;
+		min-height: 100px*$sp;
+		font-size: 30px*$sp;
+	}
+	@include mq(pc) {
+		min-width: 280px;
+		height: 60px;
+		image-rendering: -webkit-optimize-contrast; // for webkit
+	}
+}
+
+// ★ 写真・文カラムの互い違い
+.un_cols.un_cols__textAndImg {
+	max-width: 1000px;
+	margin: 0 auto;
+
+	@include mq(sp) {
+		margin-top: round(75px*$sp);
+	}
+
+	> li {
+		@include mq(sp) {
+			font-size: 28px*$sp;
+			&:nth-child(n+2) {
+				margin-top: round(140px*$sp);
+			}
+		}
+		@include mq(pc) {
+			margin-top: 80px;
+			overflow: hidden;
+			font-size: 16px;
+			line-height: 1.63;
+
+			&:nth-child(2n-1) {
+				> figure {
+					float: left;
+
+					& ~ * {
+						margin-left: 53%;
+					}
+				}
+			}
+			&:nth-child(2n) {
+				> figure {
+					float: right;
+
+					& ~ * {
+						margin-right: 53%;
+					}
+				}
+			}
+		}
+
+		> figure {
+			@include mq(sp) {
+				max-width: 90%;
+				margin: 0 auto;
+			}
+			@include mq(pc) {
+				width: 50%;
+			}
+		}
+		> h3 {
+			font-size: 24px;
+			font-weight: 700;
+			letter-spacing: .05em;
+			line-height: 1.42em;
+			color: #6b321b;
+
+			margin-top: .25em;
+			padding-bottom: .4em;
+			border-bottom: 3px solid $c1;
+			margin-bottom: .5em;
+
+			@include mq(sp) {
+				font-size: 40px*$sp;
+				margin-top: .75em;
+				padding-bottom: .75em;
+				text-align: center;
+				line-height: 1.25;
+			}
+
+			small {
+				letter-spacing: 0;
+				display: inline-block;
+
+				@include mq(sp) {
+					font-size: .75em;
+				}
+			}
+		}
+	}
+}
+
+// セクションタイトル：上にアイコンあり
+.bl_sect_iconTopTitle {
+	background: no-repeat center top/60px auto;
+	font-size: 36px;
+	font-weight: 700;
+	letter-spacing: .2em;
+	padding-top: 80px;
+	padding-left: .2em;
+	text-align: center;
+	color: #6b321b;
+
+	@include mq(sp) {
+		background-size: 80px*$sp auto;
+		padding-top: 110px*$sp;
+		font-size: 50px*$sp;
+	}
+	@include mq(pc) {
+		image-rendering: -webkit-optimize-contrast; // for webkit
+	}
+}
+
+// CTAボタン
+.bl_btns.bl_btns__cta {
+	max-width: 1000px;
+
+	@include mq(sp) {
+		> .el_btn {
+			min-height: round(120px*$sp);
+			max-width: 270px;
+
+			&:nth-child(n+2) {
+				margin-top: 20px;
+			}
+		}
+	}
+}
+.el_btn.el_btn__s1[href^="tel:"] {
+	@include mq(pc) {
+		background: transparent;
+		border: none;
+	}
+	&:after {
+		display: none;
+	}
+	i {
+		font-size: 16px;
+		font-weight: 700;
+		letter-spacing: .2em;
+		padding-left: .2em;
+
+		@include mq(sp) {
+			display: none;
+		}
+	}
+	b {
+		font-weight: 900;
+		letter-spacing: .05em;
+		font-size: 38px;
+		white-space: nowrap;
+
+		@include mq(sp) {
+			font-size: 42px*$sp;
+		}
+
+		@include icon(before,'../img/i_tel_br.png',1em,1em, 0 .25em -0.15em 0);
+		&:before {
+			border: 2px solid #6b321b;
+			border-radius: 50%;
+			background-size: auto 55%;
+		}
+	}
+	u {
+		font-size: 22px*$sp;
+		letter-spacing: .2em;
+		padding-left: .2em;
+		margin-top: .25em;
+		text-decoration: none;
+
+		@include mq(pc) {
+			display: none;
+		}
+	}
+}
+// メールで問合せボタン
+.el_btn.el_btn__s1[href*="contact/"] {
+	@include mq(sp) {
+		min-height: round(120px*$sp);
+	}
+	&:after {
+		display: none;
+	}
+
+	b {
+		@include mq(sp) {
+			letter-spacing: 0;
+		}
+		@include icon(before,'../img/i_mail_br.png',1.25em,1em, 0 .5em -0.15em 0);
+	}
+}
+
+// 会社概要 表
+.bl_company_profile {
+	background: #fff;
+	width: 100%;
+	max-width: 1000px;
+	margin: 0 auto;
+
+	@include mq(sp) {
+		margin-top: 50px*$sp;
+	}
+	@include mq(pc) {
+		margin-top: 60px;
+		max-width: 100%;
+		width: 1000px;
+		font-size: 16px;
+	}
+
+	tr:nth-child(2n) {
+		th,
+		td {
+			background: #f3ecea;
+		}
+	}
+
+	th,
+	td {
+		padding: 1.1em 1em 1.2em;
+		line-height: 2.13;
+		vertical-align: top;
+
+		@include mq(sp) {
+			padding: .75em .75em .8em;
+			line-height: 1.69;
+		}
+	}
+	th {
+		font-weight: 700;
+		width: 20%;
+
+		@include mq(sp) {
+			width: 6.5em;
+		}
+		@include mq(pc) {
+			letter-spacing: .1em;
+			padding-left: 3em;
+		}
+	}
+	td {
+		letter-spacing: .05em;
+
+		.el_mail {
+			color: #508ada;
+
+			@include mq(pc) {
+				transition: .2s opacity;
+				&:hover,
+				&:focus {
+					opacity: .7;
+				}
+
+			}
+		}
+	}
+
+	.un_ib {
+		> li {
+			@include mq(pc) {
+				display: inline-block;
+				margin-right: 1.5em;
+			}
+		}
+	}
+}
+
+.br_pc {
+	@include mq(sp) {
+		display: none;
+	}
+}
+
+// END OF FILE

@@ -1,0 +1,854 @@
+@charset "utf-8";
+// テンプレート: 2021A
+// 書式: PRECSS
+
+// _header.scss v20210213a
+
+// 当ファイルは原則「★」の箇所のみサイト固有のスタイルに応じて変更。
+// 使わないコードはコメント化して残しておくこと。
+
+// -----------------------------
+// ヘッダー
+// -----------------------------
+
+// ★設定: ヘッダー関連
+$pcHeaderH: 120px; // PC時のヘッダー高さ
+$spHeaderH: 66px; // SP時のヘッダー高さ
+
+// ヘッダー全体(通常は変更不要)
+.ly_header {
+  // Reset
+  margin: 0;
+  padding: 0;
+  display: block;
+  position: relative;
+  width: 100%;
+  text-align: left;
+  z-index: 2; // Swiperより上
+
+  // ★Design
+  @include mq(sp) {
+    height: $spHeaderH;
+  }
+  @include mq(pc) {
+    //	height: $pcHeaderH;
+  }
+}
+
+// ヘッダー
+.bl_header {
+  // Reset
+  margin: 0;
+  padding: 0;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.8);
+
+  // ★Design
+  margin: 0 auto;
+  width: 100%;
+
+  // ★タイトルとグロナビを横並びにする
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+
+  // 有効にすると子のposition:fixedが効かない
+  //backdrop-filter: blur(3px);
+
+  // ★画面上部に固定する場合
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  // 高さ節約状態への遷移
+  //transition: .2s height, .2s backdrop-filter, .2s background, .2s top;
+  transition: 0.2s height;
+
+  @include mq(sp) {
+    // ★ヘッダーを画面固定しない場合
+    //position: relative;
+
+    // ★Design
+    height: $spHeaderH;
+    justify-content: flex-start;
+
+    // ★.bl_header_catch を左右一杯にする場合
+    padding: 0;
+  }
+  @include mq(pc) {
+    //	height: $pcHeaderH;
+    background: rgba(255, 255, 255, 0.9);
+    min-width: $pcBodyMinWidth;
+    border-bottom: solid 1px #e5e5e5;
+    height: 70px;
+
+    transition: 0.3s height, 0.3s background;
+  }
+
+  // SPドロワ表示時の背景暗転オーバーレイ
+  &:before {
+    @include mq(sp) {
+      position: fixed;
+      display: block;
+      content: "";
+      background: #000;
+      width: 0%;
+      height: 100%;
+      top: 0;
+      right: 0;
+      opacity: 0;
+      // 閉じる時のトランジション
+      transition: 0s width 0.2s, 0.2s opacity;
+    }
+  }
+}
+
+// -----------------------------
+// 左側 サイト名
+// -----------------------------
+
+// サイトタイトル
+// ※キャッチとサイト名を内包するブロック
+.bl_header_title {
+  @include mq(sp) {
+    margin-left: 15px;
+  }
+  @include mq(pc) {
+    transition: 0.2s height, 0.2s margin;
+    margin-left: 20px;
+  }
+}
+.logo {
+  margin-left: 20px;
+  font-size: 25px;
+}
+// サイトのキャッチフレーズ
+b.bl_header_catch {
+  // Reset
+  font-weight: inherit;
+  margin: 0;
+
+  // ★Design
+  display: none;
+  line-height: 1.25;
+  letter-spacing: 0.05em;
+  font-weight: 400;
+
+  // 非表示→表示
+  overflow: hidden;
+  max-height: 3em;
+  opacity: 1;
+  transition: 0.2s opacity, 0.2s max-height;
+
+  @include mq(sp) {
+    font-feature-settings: "palt";
+    // ★Design
+    font-size: 12px;
+  }
+}
+
+// タイトル(文字とロゴ)
+.bl_header_name {
+  // Reset
+  display: block;
+  color: inherit;
+  line-height: 1.25;
+  transition: 0.2s margin;
+
+  // ★Design
+  font-weight: 700;
+  transition: 0.2s width, 0.2s margin;
+  color: #555;
+
+  // ★画像ロゴの場合、文字は隠す
+  overflow: hidden;
+  white-space: nowrap;
+  text-indent: 101%;
+  background: url(../img/i_logotype.png) no-repeat left center/contain;
+
+  // ★テキストの場合
+  font-size: 28px;
+  font-weight: 700;
+
+  @include mq(sp) {
+    // ★Design
+
+    // ★画像ロゴの場合も要設定
+    font-size: 50px * $sp;
+
+    // ★画像ロゴの場合
+    width: 200px;
+
+    transition: 0.2s opacity;
+
+    &:nth-child(2) {
+      margin-top: 2px;
+    }
+  }
+  @include mq(pc) {
+    // ★Design
+    width: 213;
+    height: 32px;
+
+    image-rendering: -webkit-optimize-contrast; // for webkit
+
+    &:nth-child(2) {
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+    }
+  }
+}
+
+// -----------------------------
+// 右側 グロナビ・CTA
+// -----------------------------
+
+// SP時ドロワ化する部分
+nav.bl_header_drawer {
+  @include mq(sp) {
+    // Default
+    position: fixed;
+    right: -100%;
+    transition: 0.3s right, 0.2s top, 0.2s height;
+    overflow: auto;
+    width: 100%;
+    max-height: 100vh;
+    padding-top: 100px * $sp;
+
+    // ★Design
+    background: #626262;
+    color: #fff;
+
+    // ★画面の途中で止める
+    width: 56%;
+
+    // ★ヘッダーを隠す場合
+    top: 0;
+    height: 100%;
+  }
+  @include mq(pc) {
+    // ★Design
+    //width: 100%;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    // ★左にタイトルを置かない場合
+    justify-content: center;
+  }
+
+  > figure {
+    @include mq(sp) {
+      width: 80%;
+      margin: 50px * $sp auto 0;
+    }
+  }
+}
+
+// -----------------------------
+// ナビゲーション
+// -----------------------------
+
+// グロナビ v20210213 (第3階層まで対応)
+ul.bl_header_nav {
+  // Reset
+  font-feature-settings: "palt";
+
+  // ★Design
+  font-family: $ff_base;
+  font-size: 14px;
+  line-height: 1.25;
+
+  @include mq(sp) {
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    width: 88%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  @include mq(pc) {
+    display: flex;
+
+    // ★Design
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 1em;
+    padding-bottom: 0.25em;
+    max-width: 1160px;
+    transition: 0.2s height;
+  }
+
+  // ------------------------
+
+  // 全階層 項目
+  li {
+    position: relative;
+
+    @include mq(sp) {
+      border-bottom: 2px solid #a0a0a0;
+    }
+    @include mq(pc) {
+      // プルダウン
+      &:hover,
+      &:focus {
+        > ul {
+          max-height: 100vh;
+          // 開くときの動き
+          transition: 0.3s max-height ease-in;
+        }
+      }
+      // プルダウン(IE以外)
+      &:focus-within {
+        > ul {
+          max-height: 100vh;
+          // 開くときの動き
+          transition: 0.3s max-height ease-in;
+        }
+      }
+    }
+  }
+
+  // 優先度の低い項目
+  li.un_sub {
+    @include mq(pc) {
+      display: none;
+    }
+  }
+
+  // お問い合わせ
+  li.un_contact {
+    > a {
+      @include mq(pc) {
+        width: 200px;
+        height: 40px;
+        background: #b38a41;
+        color: #fff;
+        border-radius: 2px;
+      }
+    }
+  }
+
+  a,
+  label {
+    // Reset
+    display: flex;
+    align-items: center;
+    align-content: center;
+    cursor: pointer;
+    position: relative;
+    //transition: .2s color;
+    height: 44px;
+    // Design
+    color: inherit;
+    padding: 4px 20px 6px;
+    font-weight: 700;
+    padding-left: 22px;
+
+    @include mq(sp) {
+      letter-spacing: 0.1em;
+      // ★右矢印あり
+      padding: 4px 30px 5px 15px;
+
+      // 子メニュー開閉機構
+      &.is_checked ~ ul {
+        max-height: 100vh;
+        // 開くときの動き
+        transition: 0.3s max-height ease-in;
+      }
+    }
+    @include mq(pc) {
+      position: relative;
+      width: 100%;
+      font-size: inherit;
+      transition: 0.2s opacity;
+      &:hover,
+      &:focus {
+        opacity: 0.7;
+      }
+    }
+
+    // 小書き・英字など
+    i {
+      display: block;
+      width: 100%;
+      font-family: $ff_base;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      padding-left: 0.25em;
+      margin-top: 6px;
+      font-weight: 700;
+
+      @include mq(sp) {
+        display: none;
+      }
+    }
+  }
+
+  // 子の開閉用ラベル
+  label,
+  a {
+    //cursor: default;
+    @include mq(sp) {
+      // jsで追加されたラベル
+      &.js_acc_toggle:nth-last-child(3) {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 44px;
+        z-index: 1;
+
+        // Design
+        background: linear-gradient(to bottom, $c1, $c1) no-repeat left
+          center/1px 80%;
+
+        display: none;
+        & ~ a {
+          // Icon
+          &:after {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
+  // jsで追加されたラベル
+  .js_acc_toggle:nth-last-child(3) {
+    @include mq(sp) {
+      padding: 0;
+    }
+    @include mq(pc) {
+      display: none;
+    }
+  }
+
+  // ------------------------
+
+  // 第1階層のみ 各項目
+  > li {
+    display: block;
+
+    @include mq(sp) {
+      // Design
+      width: 100%;
+    }
+    @include mq(pc) {
+      height: 100%;
+      margin: 0 1em;
+    }
+    > a,
+    > label {
+      @include mq(pc) {
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+        letter-spacing: 0.2em;
+        padding: 4px 0.25em 6px 0.45em;
+      }
+    }
+  }
+
+  // ------------------------
+
+  // 第2階層以降 共通
+  > li ul {
+    overflow: hidden;
+
+    @include mq(sp) {
+      // 閉じる時の動き
+      transition: 0.3s max-height ease-out;
+
+      > li {
+        > a,
+        > label {
+          font-weight: 500;
+        }
+      }
+    }
+    @include mq(pc) {
+      position: absolute;
+
+      // ★Design
+      background: rgba(255, 255, 255, 0.95);
+
+      &:hover,
+      &:focus {
+        overflow: visible;
+      }
+      &:focus-within {
+        overflow: visible;
+      }
+
+      a,
+      label {
+        // ★ Design
+        padding-left: 20px;
+        padding-right: 20px;
+        height: 48px;
+        letter-spacing: 0.1em;
+        transition: 0.2s opacity;
+        min-width: 10em;
+
+        &:hover,
+        &:focus {
+          opacity: 0.7;
+        }
+      }
+    }
+  }
+
+  // 第2階層のみ
+  > li {
+    @include mq(pc) {
+      // 第2階層のみ 開閉機構
+      &:hover,
+      &:focus {
+        > ul {
+          max-height: 100vh;
+          // 開くときの動き
+          transition: 0.3s max-height ease-in;
+        }
+      }
+      // IE以外
+      &:focus-within {
+        > ul {
+          max-height: 100vh;
+          // 開くときの動き
+          transition: 0.3s max-height ease-in;
+        }
+      }
+    }
+    > ul {
+      @include mq(sp) {
+        border-top: solid 2px #898989;
+      }
+      @include mq(pc) {
+        // 縦に開閉
+        left: 0;
+        top: 100%;
+        max-height: 0;
+        min-width: 100%;
+        // 閉じる時の動き
+        transition: 0.3s max-height ease-out 0.1s;
+
+        // ※注意：marginで間隔を作るとhover処理判定が外れる。
+      }
+      > li {
+        @include mq(sp) {
+          border-bottom: solid 1px #898989;
+        }
+        @include mq(pc) {
+          border: solid 1px #e5e5e5;
+          border-bottom: none;
+        }
+        &:last-child {
+          @include mq(sp) {
+            border-bottom: none;
+          }
+          @include mq(pc) {
+            border-bottom: solid 1px #e5e5e5;
+          }
+        }
+        > a,
+        > label {
+          @include mq(pc) {
+            white-space: nowrap;
+          }
+
+          @include mq(sp) {
+            &:before {
+              display: inline-block;
+              content: "-";
+              width: 1em;
+              height: 1.3em;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // ------------------------
+
+  // 第3階層以降の動き
+  > li > ul {
+    li {
+      &:hover,
+      &:focus {
+        > ul {
+          @include mq(pc) {
+            // 開くときの動き
+            transition: 0.3s max-width ease-in;
+            max-width: 100%;
+          }
+        }
+      }
+      // IE以外
+      &:focus-within {
+        > ul {
+          @include mq(pc) {
+            // 開くときの動き
+            transition: 0.3s max-width ease-in;
+            max-width: 100%;
+          }
+        }
+      }
+    }
+
+    // 第3階層以降
+    ul {
+      @include mq(pc) {
+        left: 100%;
+        top: 0;
+        // 横に開閉
+        max-width: 0;
+        // 閉じる時の動き
+        transition: 0.3s max-width ease-out 0.1s;
+      }
+
+      a,
+      label {
+        @include mq(sp) {
+          padding-left: 50px;
+        }
+      }
+    }
+  }
+}
+
+// ★グロナビ 表示中ページ明示
+.ly_header {
+  &.ly_header__index .bl_header_nav li:nth-child(1),
+  &.ly_header__service .bl_header_nav li:nth-child(2),
+  &.ly_header__company .bl_header_nav li:nth-child(3),
+  &.ly_header__partner .bl_header_nav li:nth-child(4),
+  &.ly_header__work .bl_header_nav li:nth-child(5) {
+    a {
+      @include mq(pc) {
+        &:after {
+          left: 5%;
+          width: 90%;
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+// -----------------------------
+// スマホ用 グロナビ ドロワー
+// -----------------------------
+// ★設定: SP用グロナビ開閉ボタン 背景透明
+$spHeaderIconW: 24px; // 3本線部分の幅
+$spHeaderIconH: 22px; // 3本線部分の高さ
+$spHeaderIconLineW: 4px; // 線1本の太さ
+
+// ★設定: SP用グロナビ開閉ボタン 四角形
+//$spHeaderIconW: 26px;     // 3本線部分の幅
+//$spHeaderIconH: 22px;     // 3本線部分の高さ
+//$spHeaderIconLineW: 4px;  // 線1本の太さ
+
+// ★設定: SP用グロナビ開閉ボタン 円形用
+//$spHeaderIconW: 20px;     // 3本線部分の幅
+//$spHeaderIconH: 17px;     // 3本線部分の高さ
+//$spHeaderIconLineW: 3px;  // 線1本の太さ
+
+// SP時グロナビ開閉ボタン
+.bl_header_drawerToggle {
+  // Reset
+  //position: absolute; // 必要に応じてfixed,relativeも可
+  z-index: 2;
+  top: 0;
+  right: 0;
+  margin: auto;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  min-width: 44px;
+  min-height: 44px;
+  overflow: hidden;
+
+  // ★Design
+  width: 44px;
+  height: 44px;
+  margin: 0 0 0 auto;
+
+  // ★四角(ボタン透明)
+  //top: 0;
+  top: 10px; // 位置変更
+  right: 0;
+  width: 50px;
+
+  // ★ヘッダー部と独立させる場合
+  position: fixed;
+
+  @include mq(sp) {
+    transition: 0.2s top;
+  }
+  @include mq(pc) {
+    display: none;
+  }
+  &:hover,
+  &:focus {
+    opacity: 1;
+  }
+
+  // ラベル
+  em {
+    // Reset
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    line-height: 1;
+    text-align: center;
+    color: #999;
+
+    // Design
+    font-size: 10px;
+  }
+}
+
+// SP時グロナビ開閉ボタン内 3本線アイコン
+.bl_header_drawerIcon {
+  width: $spHeaderIconW;
+  height: $spHeaderIconH;
+  position: relative;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+
+  i {
+    height: $spHeaderIconLineW;
+    display: block;
+    width: 100%;
+    transition: 0.3s ease-in-out;
+    transform-origin: center;
+
+    // ★Design(線の色)
+    background: #b38a41;
+  }
+}
+
+// SP時グロナビ開閉制御　v20201206
+.bl_header_drawerState {
+  display: none;
+
+  @include mq(sp) {
+    // チェックON(ドロワ表示)
+    &:checked {
+      // ヘッダーのフィルタを解除
+      // ※ドロワのbackdropを正常動作させる為
+      & ~ .bl_header {
+        backdrop-filter: none;
+      }
+
+      // トグルボタン
+      & ~ .bl_header .bl_header_drawerToggle {
+        //top: 0;
+
+        .bl_header_drawerIcon {
+          i:nth-child(1) {
+            transform: translateY(($spHeaderIconH - $spHeaderIconLineW)/2)
+              rotate(-45deg);
+          }
+          i:nth-child(2) {
+            transform: rotate(45deg);
+            opacity: 0;
+          }
+          i:nth-child(3) {
+            transform: translateY(($spHeaderIconH - $spHeaderIconLineW)/-2)
+              rotate(45deg);
+          }
+        }
+      }
+      // ドロワ表示
+      & ~ .bl_header .bl_header_drawer {
+        right: 0;
+      }
+    }
+  }
+}
+
+// -----------------------------
+// ヘッダー内 会社情報
+// -----------------------------
+.bl_header_info {
+  // ★Design
+  padding: 15px 20px 0;
+  text-align: center;
+
+  @include mq(pc) {
+    display: none;
+  }
+}
+// 会社名
+.bl_header_info_name {
+  font-weight: 700;
+  font-size: 36px * $sp;
+
+  letter-spacing: 0.05em;
+  padding-left: 0.05em;
+}
+// 住所
+.bl_header_info_adrs {
+  margin-top: 0.75em;
+}
+
+// -----------------------------
+// スクロール後にヘッダーを低くする
+// -----------------------------
+.is_noTop {
+  //	.bl_header_sub {
+  //		@include mq(sp) {
+  //			height: 0;
+  //		}
+  //	}
+  .bl_header {
+    @include mq(sp) {
+      //top: 0;
+      height: 44px;
+    }
+    @include mq(pc) {
+      background: rgba(255, 255, 255, 0.9);
+    }
+  }
+  .bl_header_drawerToggle {
+    top: 0;
+  }
+  .bl_header_catch {
+    opacity: 0;
+    max-height: 0;
+  }
+  .bl_header_name {
+    @include mq(sp) {
+      opacity: 0;
+    }
+  }
+}
+
+// -----------------------------
+// WP管理ツールバー表示時の対応 v20200111
+// -----------------------------
+.admin-bar {
+  #wpadminbar {
+    background: rgba(35, 40, 45, 0.9);
+  }
+  .ly_header {
+    @include mq(sp) {
+      height: #{$spHeaderH - 46px};
+    }
+  }
+  .bl_header {
+    @include mq(pc) {
+      margin-top: 32px;
+    }
+  }
+}
+// END OF FILE

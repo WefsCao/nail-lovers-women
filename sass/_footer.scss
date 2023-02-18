@@ -1,0 +1,576 @@
+@charset "utf-8";
+// テンプレート: 2021A
+// 書式: PRECSS
+
+// _footer.scss v20210213
+
+// -----------------------------
+// トップに戻る (backToTop) v20201122
+// -----------------------------
+// HTMLは .bl_backToTop > a[href="#top"] とする。
+// 基準位置
+.bl_backToTop {
+  position: relative;
+  display: block;
+
+  // ★半分下に位置をずらす場合
+  // (ボタンの半分 + bottom値)
+  @include mq(sp) {
+    margin-top: 35px;
+    margin-bottom: -35px;
+  }
+  @include mq(pc) {
+    margin-top: 50px;
+    margin-bottom: -50px;
+  }
+
+  // ボタン
+  > a {
+    // Reset
+    display: block;
+    text-align: center;
+    min-width: 44px;
+    min-height: 44px;
+    box-sizing: border-box;
+    text-decoration: none;
+    color: inherit;
+    line-height: 1.25;
+    transition: 0.2s border, 0.2s color, 0.2s height, 0.2s width, 0.2s opacity;
+
+    // ★Design
+    background: #626262;
+    border: solid 1px #7d7d7d;
+
+    @include mq(sp) {
+      // ★Design
+      right: 10px;
+      bottom: 10px;
+
+      // ★四角
+      border-width: 2px;
+      padding-top: 18px;
+      font-size: 12px;
+    }
+    @include mq(pc) {
+      // ★Design
+      right: 30px;
+      bottom: 20px;
+      // ★四角
+      width: 60px;
+      height: 60px;
+      padding-top: 25px;
+      font-size: 16px;
+
+      &:hover,
+      &:focus {
+        opacity: 0.7;
+        //border-color: #43bb3d;
+        //color: #43bb3d;
+      }
+    }
+
+    // ★矢印
+    @include iconArrow(before, absolute, #adadad, 0.8em, 1px);
+    &:before {
+      top: 44%;
+      left: 50%;
+      transform: translate(-50%, 0) rotate(-135deg);
+
+      @include mq(sp) {
+        border-width: 0 2px 2px 0;
+      }
+    }
+  }
+}
+
+// スクロール追従タイプ
+.bl_backToTop {
+  > a {
+    position: fixed;
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  // 元の配置位置より下げない
+  &.is_inView {
+    > a {
+      position: absolute;
+    }
+  }
+}
+body.is_noTop {
+  // 下にスクロールした状態(有効化)
+  .bl_backToTop {
+    > a {
+      opacity: 1;
+      pointer-events: auto;
+
+      @include mq(pc) {
+        &:hover,
+        &:focus {
+          opacity: 0.7;
+        }
+      }
+    }
+  }
+}
+
+// -----------------------------
+// フッター全体
+// -----------------------------
+// HTMLは .ly_footer > .bl_footer_cta + .bl_footer
+.ly_footer {
+  // Reset
+  font-size: 14px;
+
+  // ★Design
+  background: #626262;
+  color: #fff;
+}
+
+// -----------------------------
+// フッター
+// -----------------------------
+.bl_footer {
+  // Reset
+  margin: 0 auto;
+
+  // ★Design
+  max-width: none;
+  font-size: 14px;
+  overflow: hidden;
+
+  @include mq(sp) {
+    //padding-top: 90px*$sp;
+    display: none;
+  }
+  @include mq(pc) {
+    // ★Design
+    display: flex;
+    justify-content: space-between;
+    //align-items: center;
+    padding-top: 50px;
+    width: 93%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+// 会社情報
+.bl_footer_info {
+  // ★中央寄せだがロゴを左にする場合。
+  @include mq(sp) {
+    max-width: calc(56px + 17em);
+    margin: 0 auto;
+  }
+
+  // ロゴ
+  .bl_footer_logo {
+    text-align: left;
+
+    @include mq(sp) {
+      text-align: center;
+    }
+
+    img {
+      vertical-align: bottom;
+
+      @include mq(sp) {
+        // ★Design
+        width: 360px * $sp;
+      }
+      @include mq(pc) {
+        // ★Design
+        //width: 160px;
+        width: 190px;
+        image-rendering: -webkit-optimize-contrast; // for webkit
+      }
+    }
+  }
+
+  // 文字情報
+  p {
+    // ★ Design
+    letter-spacing: 0.05em;
+    margin-top: 0.25em;
+    @include mq(sp) {
+      text-align: center;
+      margin-top: 0.25em;
+    }
+  }
+  // 社名
+  .bl_footer_name {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-top: 0.5em;
+
+    @include mq(sp) {
+      font-size: 40px * $sp;
+      text-align: left;
+      line-height: 1;
+      letter-spacing: 0;
+      padding-left: 0;
+      white-space: nowrap;
+    }
+  }
+  // 住所
+  .bl_footer_adrs {
+    // ★Design
+    margin-top: 30px;
+    font-size: 12px;
+    letter-spacing: 0.075em;
+    line-height: 2em;
+
+    @include mq(sp) {
+      //width: 100%;
+      //margin-right: 0;
+      font-size: 26px * $sp;
+      text-align: left;
+    }
+  }
+  // 電話
+  .bl_footer_tel {
+    @include mq(sp) {
+      clear: both;
+      margin-top: 1em;
+    }
+  }
+  a[href^="tel:"] {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding-left: 0.05em;
+    margin-top: 0.5em;
+
+    @include mq(sp) {
+      font-size: 46px * $sp;
+      margin-top: 20px;
+    }
+
+    // ★Icon
+    @include icon(
+      before,
+      "../img/i_tel_wt.png",
+      1.25em,
+      1.25em,
+      0 0.25em -0.25em 0
+    );
+    &:before {
+      border-radius: 50%;
+      border: 2px solid #fff;
+      background-size: auto 50%;
+      image-rendering: -webkit-optimize-contrast; // for webkit
+
+      @include mq(sp) {
+        border-width: 1px;
+      }
+    }
+  }
+}
+
+// フッター内 ナビ
+ul.bl_footer_nav {
+  // ★Design
+  display: flex;
+  flex-wrap: wrap;
+
+  @include mq(sp) {
+    // ★項目 縦並び
+    margin: 30px * $sp auto 0;
+    width: calc(100% - 40px);
+    justify-content: space-between;
+  }
+  @include mq(pc) {
+    // ★Design
+    justify-content: center;
+
+    // ★複数列の縦並び
+  }
+
+  // ------------------------
+
+  // 全階層共通
+  li {
+    @include mq(sp) {
+      // ★Design
+      border-bottom: 2px solid #a0a0a0;
+    }
+    @include mq(pc) {
+      // IEで項目を上下中央寄せにする対策
+      > * {
+        width: 100%;
+      }
+    }
+  }
+  a,
+  label {
+    display: flex;
+    flex-wrap: wrap;
+    color: inherit;
+
+    // Design
+    align-items: center;
+    align-content: center;
+    line-height: 1.25;
+    font-weight: 500;
+    min-height: 44px;
+
+    @include mq(sp) {
+      min-height: 44px;
+      justify-content: center;
+    }
+    @include mq(pc) {
+      position: relative;
+
+      // ★Design
+      min-height: 20px;
+
+      // ★横並びの場合
+      padding: 0.1em 0 0.2em 0.1em;
+      letter-spacing: 0.1em;
+    }
+  }
+  a {
+    @include mq(pc) {
+      // ★ホバー：通常
+      transition: 0.2s opacity;
+      &:hover,
+      &:focus {
+        opacity: 0.7;
+      }
+    }
+  }
+
+  // ------------------------
+
+  // 第1階層のみ
+  > li {
+    // ★Design
+    @include mq(sp) {
+      // ★横2列の場合
+      width: 48%;
+      text-align: center;
+      margin-top: 60px * $sp;
+
+      &:nth-child(3) {
+        width: 100%;
+        border-bottom: none;
+      }
+    }
+    @include mq(pc) {
+      // ★項目横並び
+      //margin-left: 4em;
+      //margin-right: 30px;
+    }
+    + li {
+      margin-left: 30px;
+
+      @media (min-width: 1600px) {
+        margin-left: 85px;
+      }
+    }
+    &:nth-child(4) {
+      @include mq(pc) {
+        margin-left: 0;
+      }
+    }
+
+    > a,
+    > label {
+      min-width: 3em;
+
+      @include mq(sp) {
+        text-align: center;
+        font-size: 26px * $sp;
+        letter-spacing: 0.2em;
+      }
+    }
+    > label {
+      @include mq(sp) {
+        width: 100%;
+        border-bottom: solid 2px #a0a0a0;
+      }
+    }
+  }
+
+  // ------------------------
+
+  // 第2階層以降 共通
+  > li ul {
+    @include mq(pc) {
+      margin-left: 1.5em;
+    }
+
+    li {
+      a,
+      label {
+        // ★Design
+        & > * {
+          text-indent: 0;
+        }
+        // ★Icon
+        &:before {
+          display: inline-block;
+          content: "";
+          width: 0.75em;
+          min-width: 0.75em;
+          height: 2px;
+          background: #fff;
+          margin-right: 0.5em;
+          margin-left: -1.25em;
+          vertical-align: middle;
+
+          @include mq(sp) {
+            position: absolute;
+          }
+        }
+      }
+    }
+  }
+
+  // 第2階層のみ
+  > li > ul {
+    // ★Design
+    @include mq(sp) {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    > li {
+      @include mq(sp) {
+        width: 48%;
+        border-bottom: solid 1px #a0a0a0;
+
+        > a,
+        > label {
+          padding-left: 2.5em;
+
+          @include mq(sp) {
+            justify-content: flex-start;
+            padding-left: 1.5em;
+          }
+        }
+      }
+      @include mq(pc) {
+        margin-top: 1em;
+      }
+    }
+  }
+
+  // ------------------------
+
+  // 第3階層のみ
+  > li > ul > li > ul {
+    > li {
+      > a,
+      > label {
+        @include mq(sp) {
+          padding-left: 4em;
+        }
+      }
+    }
+  }
+}
+
+// フッター ボタン群 (ダウンロード等)
+.bl_footer_btns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @include mq(sp) {
+    margin: 20px auto 0;
+    width: 77%;
+  }
+
+  > li {
+    display: flex;
+    margin: 36px 18px 0;
+
+    @include mq(sp) {
+      width: 100%;
+      margin: 10px 0 0;
+    }
+
+    > a {
+      @extend %el_btn;
+      border: 2px solid $cT;
+      border-radius: 1.4em / 50%;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      padding-left: 0.77em;
+      min-width: 170px;
+      min-height: 40px;
+
+      @include icon(
+        before,
+        "../img/i_file_bk.png",
+        1.2em,
+        1.2em,
+        0 0.5em -0.05em 0
+      );
+
+      @include mq(sp) {
+        border-width: 1px;
+        width: 100%;
+      }
+      @include mq(pc) {
+        transition: 0.2s opacity;
+        &:hover,
+        &:focus {
+          opacity: 0.7;
+        }
+      }
+    }
+  }
+}
+
+// -----------------------------
+// サブフッター(メインフッターの下部など)
+// -----------------------------
+
+// サブフッター
+.bl_footer_sub {
+  // ★Design
+  //border-top: 1px solid #d2d2d2;
+  padding: 15px 0;
+
+  @include mq(sp) {
+    //margin-top: 125px*$sp;
+  }
+  @include mq(pc) {
+    display: flex;
+    flex-wrap: wrap;
+
+    // ★内容がコンテナ幅の右
+    margin: 0 auto;
+    justify-content: flex-end;
+    margin-right: 25px;
+
+    // ★中央寄せ
+    //justify-content: center;
+
+    // ★コピーライトのみ画面右端
+    //justify-content: space-between;
+    //padding: 0 20px 20px calc(50% - 580px);
+  }
+}
+
+// コピーライト
+.bl_footer_copyright {
+  // ★Design
+  font-size: 14px;
+  letter-spacing: 0.05em;
+
+  @include mq(sp) {
+    text-align: center;
+    font-size: 12px;
+  }
+  @include mq(pc) {
+    margin-top: 50px;
+  }
+}
+
+// END OF FILE

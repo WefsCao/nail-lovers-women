@@ -1,0 +1,567 @@
+// MAIN VISUAL
+.bl_mv.bl_mv__nail {
+	background: url(../img/nail_mv_pc.jpg) no-repeat center/cover;
+	height: 30vw !important;
+	max-height: 30vw !important;
+	min-height: 600px !important;
+	margin-top: 70px !important;
+
+	.bl_mv_col {
+		display: none;
+	}
+
+	@include mq(sp) {
+		// ★大きさ設定:SP
+		//		$w: 640*$sp; // 背景画像の幅px
+		//		$h: 680*$sp; // 背景画像の高さpx
+		//
+		//		// ★スライドがないときは有効化
+		//		height: #{($h/$w)*100}vw;
+		background: url(../img/nail_mv_sp.jpg) no-repeat center/cover;
+		height: 360px !important;
+		min-height: 360px !important;
+		margin-top: 0 !important;
+	}
+
+}
+
+.ly_main__nail {
+	.bl_path_wrapper {
+		display: none !important;
+	}
+}
+
+// GENARLAL STYLES
+.bl_sect__nail {
+
+	& > * {
+		font-size: 14px;
+		font-family: $ff_mincho;
+		color: #555;
+	}
+
+	.heading-secondary,
+	.ttl-en {
+		text-align: center;
+	}
+
+	.heading-secondary {
+		font-size: 40px;
+		letter-spacing: 2px;
+		font-weight: 600;
+
+		@include mq(sp) {
+			font-size: resize(44px);
+			text-align: center;
+		}
+	}
+
+	.ttl-ja {
+		font-weight: normal;
+		font-stretch: normal;
+		font-style: normal;
+		line-height: normal;
+		letter-spacing: 0.7px;
+
+		@include mq(sp) {
+			font-size: resize(24px);
+			text-align: center;
+		}
+	}
+}
+
+//section1 
+.bl_sect__nail1 {
+	padding-top: 127px;
+	height: 570px;
+	background-image: url(../img/nail_concept-bg.jpg);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+
+	@media screen and (min-width: 1921px) {
+		height: 30vw;
+	}
+
+	@include mq(sp) {
+		background-image: url(../img/nail_concept-bg_sp.jpg);
+		padding-top: resize(56px);
+		background-position: right;
+	}
+
+	.heading-secondary,
+	.ttl-en {
+		text-align: left;
+
+		@include mq(sp) {
+			text-align: center;
+		}
+	}
+
+	.nail1 {
+
+		&_content {
+			padding-left: 100px;
+
+			@include mq(sp) {
+				padding-left: 0;
+			}
+		}
+
+		&_ttl {
+			margin-bottom: 12px;
+			color: #b38a41;
+
+			@include mq(sp) {
+				margin-bottom: resize(17px);
+			}
+		}
+
+		&_txt {
+			margin-top: 35px;
+			font-size: 16px;
+			font-weight: normal;
+			font-stretch: normal;
+			font-style: normal;
+			line-height: 2.25;
+			letter-spacing: 0.8px;
+			text-align: justify;
+
+			@include mq(sp) {
+				margin-top: 31px;
+				font-size: resize(28px);
+				line-height: 1.93;
+				letter-spacing: 0;
+			}
+		}
+	}
+}
+
+//section 2
+.bl_sect__nail2 {
+
+	.nail2 {
+
+		&_gold-box,
+		&_grey-box {
+			//			padding: 30px 0 25px 0;
+			text-align: center;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+		}
+
+		&_gold-box {
+			height: 140px;
+			background: linear-gradient(to right, #b8792e, #e2b646);
+			font-size: 30px;
+			color: #fff;
+
+			@include mq(sp) {
+				font-size: resize(30px);
+				height: resize(150px);
+			}
+
+			span {
+				font-size: 40px;
+
+				@include mq(sp) {
+					font-size: resize(40px);
+				}
+			}
+		}
+
+		&_grey-box {
+			height: 100px;
+			background: linear-gradient(to right, #f1edec, #f1edec);
+			font-size: 18px;
+			line-height: 1.67;
+
+			@include mq(sp) {
+				padding: resize(25px);
+				height: resize(250px);
+				font-size: resize(26px);
+				line-height: 1.85;
+			}
+		}
+	}
+}
+
+//section3 
+.bl_sect__nail3 {
+	padding: 70px 0 90px 0;
+
+	@include mq(sp) {
+		padding: resize(60px) 0;
+	}
+
+	h2 {
+		color: #b38a41;
+
+	}
+
+	.nail3 {
+
+		&_ly_flex {
+			margin: 15px auto 50px auto;
+			@include dp-flex(0, 70px);
+			justify-content: center;
+			gap: 80px;
+
+			@include mq(sp) {
+				margin-bottom: resize(60px);
+			}
+		}
+
+		&_flex_item {
+			flex: 0 0 300px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		&_img {
+			img {
+				@include mq(sp) {
+					width: 70%;
+				}
+			}
+		}
+
+		&_name {
+			width: 240px;
+			margin-bottom: 10px;
+			background-color: #caa33d;
+			color: #fff;
+			font-size: 24px;
+			font: 600;
+			text-align: center;
+
+			@include mq(sp) {
+				width: 250.55px;
+				height: resize(61px);
+				font-size: resize(34px);
+			}
+		}
+
+		&_position {
+			margin-bottom: 17px;
+			text-align: center;
+
+			@include mq(sp) {
+				font-size: resize(28px);
+			}
+		}
+
+		&_cert {
+			width: 230px;
+			font-stretch: normal;
+			font-style: normal;
+			line-height: 1.43;
+			letter-spacing: 0.7px;
+			text-align: justify;
+			margin-top: auto;
+
+			@include mq(sp) {
+				width: 100%;
+				text-align: left;
+				padding-left: 30px;
+				font-size: resize(28px);
+				line-height: 1.54;
+				letter-spacing: 1.4px;
+			}
+		}
+
+		&_rybon {
+			margin: 0 auto;
+			margin-bottom: 73px;
+			width: 1100px;
+			height: 81px;
+			background-image: url(../img/nail_rybon.png);
+			background-size: cover;
+			background-repeat: no-repeat;
+			background-position: center;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 36px;
+			font-stretch: normal;
+			font-style: normal;
+			line-height: normal;
+			letter-spacing: 3.6px;
+			text-align: center;
+			color: #634921;
+
+			@include mq(sp) {
+				background-image: url(../img/nail_rybon_sp.png);
+				background-size: contain;
+				width: 355px;
+				height: resize(119px);
+				font-size: resize(40px);
+				letter-spacing: 4px;
+				margin-bottom: resize(40px);
+			}
+		}
+	}
+}
+
+//section4 
+.bl_sect__nail4 {
+	padding: 80px 0;
+	background-color: #aedadf;
+
+	@include mq(sp) {
+		padding: resize(58px) 0 resize(48px) 0;
+	}
+
+	h2 {
+		color: #448b88;
+	}
+
+	.nail4 {
+
+		&_ly_flex {
+			margin: 44px 0 36px 0;
+			@include dp-flex(17px, 50px);
+			justify-content: center;
+		}
+
+		&_flex_item {
+			flex: 0 0 320px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 34px;
+
+			@include mq(sp) {
+				//				gap: resize(34px);
+			}
+		}
+
+		&_img {
+			position: relative;
+		}
+
+		&_cap {
+			position: absolute;
+			left: 50%;
+			bottom: 0;
+			transform: translate(-50%, 50%);
+			width: 250px;
+			height: 40px;
+			position: absolute;
+			color: #fff;
+			background: linear-gradient(to right, #b8792e, #e2b646);
+			text-shadow: 0 0 7.8px rgba(0, 0, 0, 0.5);
+			font-size: 22px;
+			font-stretch: normal;
+			font-style: normal;
+			line-height: normal;
+			letter-spacing: 1.1px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			@include mq(sp) {
+				font-size: resize(32px);
+			}
+		}
+
+		&_price {
+			font-size: 24px;
+			padding-bottom: 10px;
+			display: inline-block;
+			border-bottom: 1px solid currentcolor;
+			font-family: 'Noto Serif JP';
+
+			@include mq(sp) {
+				padding-bottom: resize(12px);
+				font-size: resize(36px);
+			}
+		}
+
+		&_price-num {
+			font-weight: 700;
+		}
+
+		&_tax {
+			font-size: 18px;
+		}
+
+		&_cyan-box {
+			width: 250px;
+			height: 40px;
+			margin: 0 auto;
+			margin-bottom: 44px;
+			background-color: #60a6a3;
+			color: #fff;
+			font-family: 'Noto Serif JP';
+			font-size: 20px;
+			font-stretch: normal;
+			font-style: normal;
+			line-height: normal;
+			letter-spacing: 1px;
+			text-align: center;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			.nail4_num {
+				font-weight: 900;
+			}
+
+			.nail4_tx {
+				font-size: 12px !important;
+			}
+		}
+
+		&_white-box {
+			max-width: 601px;
+			height: 171px;
+			margin: 0 auto;
+			box-shadow: 3.9px 5.8px 9.1px 0.9px rgba(0, 0, 0, 0.17);
+			background-color: #f3f3f3;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			gap: 18px;
+
+			@include mq(sp) {
+				height: resize(400px);
+				padding: resize(40px);
+			}
+		}
+
+		&_box-ttl {
+			display: inline-block;
+			font-family: 'Noto Serif JP';
+			font-size: 22px;
+			font-weight: 600;
+			font-stretch: normal;
+			font-style: normal;
+			line-height: 1.36;
+			letter-spacing: 1.1px;
+			text-align: center;
+			color: #b38a41;
+			padding-bottom: 10px;
+			position: relative;
+
+			&::after {
+				content: "";
+				position: absolute;
+				top: 100%;
+				left: 50%;
+				transform: translateX(-50%);
+				background: #b38a41;
+				width: 180px;
+				height: 1px;
+			}
+
+			@include mq(sp) {
+				font-size: resize(32px);
+			}
+		}
+
+		&_txt {
+			text-align: center;
+			font-weight: normal;
+			font-stretch: normal;
+			font-style: normal;
+			line-height: 1.43;
+			letter-spacing: 0.7px;
+			text-align: center;
+
+			@include mq(sp) {
+				font-size: resize(26px);
+				line-height: 1.85;
+
+			}
+		}
+	}
+}
+
+//section 5
+.bl_sect__nail5 {
+	padding: 90px 0;
+	background-image: url(../img/nail_gallery-bg.jpg);
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+
+	@include mq(sp) {
+		padding: resize(80px) 0 resize(65px) 0;
+		background-image: url(../img/nail_gallery-bg_sp.jpg);
+	}
+
+	.ttl-ja {
+		@include mq(sp) {
+			font-size: resize(26px) !important;
+		}
+	}
+
+	h2 {
+		color: #b38a41;
+	}
+
+	.ttl-ja {
+		font-size: 18px;
+		font-weight: normal;
+		font-stretch: normal;
+		font-style: normal;
+		line-height: 1.67;
+		letter-spacing: 0.9px;
+	}
+
+	.nail5 {
+
+		&_ly_grid {
+			@include dp-grid(auto-fit, 250px, 3, 250px, 18px, 18px);
+			max-width: 1060px;
+			margin: 0 auto;
+			margin-top: 45px;
+
+			@include mq(sp) {
+				grid-template-columns: repeat(2, 1fr) !important;
+				grid-template-rows: repeat(6, 1fr);
+				grid-gap: 18px;
+			}
+		}
+
+		&_grid_item {
+			&:first-child {
+				img {
+					@include mq(sp) {
+						content: url(../img/nail_gallery1_sp.jpg);
+					}
+				}
+			}
+		}
+	}
+}
+
+//section6 
+.bl_sect__nail6 {
+	padding: 90px 0;
+
+	@include mq(sp) {
+		padding: resize(62px) 0;
+	}
+
+	.nail6 {}
+}
+
+//section 7
+.bl_sect__nail7 {
+	padding: 85px 0 118px 0;
+	background-image: url(../img/nail_info-bg.jpg);
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+
+	@include mq(sp) {
+		padding: resize(48px) 0 resize(60px) 0;
+		background-image: url(../img/nail_info-bg_sp.jpg);
+	}
+}
